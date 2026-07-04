@@ -3,7 +3,7 @@ const rl = require('readline-sync')
 let excer = "\n======== Exercício 15 — Pode Fazer a Prova? ========\n"
 console.log(excer)
 
-let aluno = rl.question('Digite o valor da compra: ')
+let aluno = rl.question('Digite o nome do aluno: ')
 aluno = aluno.toLocaleUpperCase()
 let freq = rl.questionFloat('Digite a frequencia (%): ')
 let tcc = rl.keyInYNStrict('Entregou o trabalho final? ')
