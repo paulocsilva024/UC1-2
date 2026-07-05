@@ -23,7 +23,9 @@ for (let i = 0; i < 5; i++) {
     if (notas[i] > maxNota) {maxNota = notas[i]}
     if (notas[i] < minNota) {minNota = notas[i]}
 }
-let media = soma / notas.length
+/*Aqui o cálculo da média usando os valores das variáveis
+    media recebe a soma das notas dividido pela quant de notas somadas */
+let media = soma / notas.length //.length traz o comprimento do array (elementos)
 console.log(`
 Nota média: ${media.toFixed(2)}
 Maior nota: ${maxNota.toFixed(2)}
