@@ -1,6 +1,5 @@
 const rl = require('readline-sync'); console.clear()
 //Exercícios de array e repetição
-let excer = "\n======== Exercício 5 — Média da Turma ========\n"
 console.log(excer)
 
 let notas = [] //Aqui ficarão armazenadas as notas
