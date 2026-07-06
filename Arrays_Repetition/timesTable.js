@@ -1,13 +1,13 @@
 const rl = require('readline-sync'); console.clear()
 //Exercícios de array e repetição
-let excer = "\n======== Exercício 6 — Tabuada (1 ao 12) ========\n"
+let exer = "\n======== Exercício 6 — Tabuada (1 ao 12) ========\n"
 let go = true
 let n
 //Estrutura de repetição: do{}while()
 do {//Faz tudo que segue...
 
 
-    console.log(excer)
+    console.log(exer)
     n = rl.questionInt(`Tabuada do `)
     console.log()//Linha em branco
 
