@@ -28,6 +28,6 @@ console.log(exer)
 //Ver se o nome está na lista
 let seek = rl.question('Quer saber se tem cadastro? Pesquise pelo nome:\n')
 let achou = false
-for (let i = 0; i < alunos.length; i++) {if (seek === alunos[i]) {achou = true}}
+for (let i = 0; i < alunos.length; i++) {if (seek === alunos[i]) {achou = true; break}}
 console.log()
 if (achou) {console.log(`Tem cadastro.`)} else {console.log(`Sem cadastro.`)}
