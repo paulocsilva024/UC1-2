@@ -154,7 +154,7 @@ function combater(inimigoBase) {
 // 4. MANIPULAÇÃO DO INVENTÁRIO (REQUISITOS DE ARRAY)
 // ==========================================
 function exibirInventario() {
-    console.log("\n=== SEU INVENTÁRIO ===");
+    console.log("\n=== SEU INVENTÁRIO ===\n");
     if (inventario.length === 0) {
         console.log("Seu inventário está vazio.");
         return;
@@ -166,10 +166,11 @@ function exibirInventario() {
         index++;
     }*/
     let contagem = inventario.reduce((contador, item) => {
-        contador[item] = (contador[item] || 0) + 1;
-        return contador;
-        }, {});
-    console.log(contagem);
+            contador[item] = (contador[item] || 0) + 1;
+            return contador;}, {});
+    let lista = Object.entries(contagem).map(
+        ([item,qtd]) => qtd > 1 ? `${item} (${qtd})` : item).join('\n');
+    console.log(lista);
 
     // Opções de gerenciamento para usar as funções obrigatórias do array
     console.log("\nDeseja gerenciar seus itens?");
