@@ -43,19 +43,19 @@ function cadastrarPersonagem() {
     console.log("       BEM-VINDO À JORNADA DO HERÓI     ");
     console.log("========================================");
     console.log("Digite o nome do seu herói:\n")
-    heroi.nome = rl.question();
+    heroi.nome = rl.question().toUpperCase();
     let classeValida = false;
     while (!classeValida) {
         console.log("\nEscolha sua classe:");
         console.log("1 - Guerreiro (Vida: 120, Ataque: 18)");
         console.log("2 - Mago (Vida: 80, Ataque: 25)");
         console.log("3 - Arqueiro (Vida: 100, Ataque: 20)");
-        let escolha = rl.question("Digite o número ou nome da classe: ").toLowerCase();
+        let escolha = rl.question("Digite o numero ou nome da classe: ").toLowerCase();
         // Utilização do switch para definir atributos iniciais
         switch (escolha) {
             case "1":
             case "guerreiro":
-                heroi.classe = "Guerreiro";
+                heroi.classe = "Guerreiro(a)";
                 heroi.vida = 120;
                 heroi.vidaMaxima = 120;
                 heroi.ataque = 18;
@@ -63,7 +63,7 @@ function cadastrarPersonagem() {
                 break;
             case "2":
             case "mago":
-                heroi.classe = "Mago";
+                heroi.classe = "Mago(a)";
                 heroi.vida = 80;
                 heroi.vidaMaxima = 80;
                 heroi.ataque = 25;
@@ -71,7 +71,7 @@ function cadastrarPersonagem() {
                 break;
             case "3":
             case "arqueiro":
-                heroi.classe = "Arqueiro";
+                heroi.classe = "Arqueiro(a)";
                 heroi.vida = 100;
                 heroi.vidaMaxima = 100;
                 heroi.ataque = 20;
@@ -81,8 +81,9 @@ function cadastrarPersonagem() {
                 console.log("Classe inválida! Tente novamente.");
         }
     }
-    console.log(`\nHerói ${heroi.nome} criado com sucesso como ${heroi.classe}!`);
-    rl.question("\nPressione ENTER para iniciar a aventura...");console.clear();
+    console.clear();
+    console.log(`\n${heroi.nome} está na aventura como ${heroi.classe}!`);
+    //rl.question("\nPressione ENTER para iniciar a aventura...");
 }
 // ==========================================
 // 3. FUNÇÕES DO SISTEMA DE COMBATE E DANO
@@ -92,7 +93,7 @@ function receberDano(dano) {
     if (heroi.vida < 0) {
         heroi.vida = 0;
     }
-    console.log(`Você sofreu ${dano} de dano! Vida atual: ${heroi.vida}/${heroi.vidaMaxima}`);
+    console.log(`Vida atual: ${heroi.vida}/${heroi.vidaMaxima}`);
 }
 function curar(quantidade) {
     heroi.vida += quantidade;
@@ -100,7 +101,7 @@ function curar(quantidade) {
         heroi.vida = heroi.vidaMaxima;
     }
     console.log(`Você recuperou ${quantidade} de vida! Vida atual: ${heroi.vida}/${heroi.vidaMaxima}`);
-};let missed = 1
+};let missed = 1 // conta quantas vezes o herói fez nada (nem atacou, nem fugiu)
 function combater(inimigoBase) {
     // Clona o objeto inimigo para não alterar o original da matriz
     let inimigo = { ...inimigoBase }; console.clear();
@@ -114,9 +115,9 @@ function combater(inimigoBase) {
         let acao = rl.question("O que deseja fazer? ");
         if (acao === "1") {
             // Turno do Jogador
-            console.log(`\nVocê ataca o ${inimigo.nome}!`);
+            console.clear();
+            console.log(`\nVocê atacou o ${inimigo.nome} e causou ${heroi.ataque} de dano!\n`);
             inimigo.vida -= heroi.ataque;
-            console.log(`Você causou ${heroi.ataque} de dano.`);
             // Verifica se o inimigo morreu
             if (inimigo.vida <= 0) {
                 console.log(`\nVocê derrotou o ${inimigo.nome}!`);
@@ -132,7 +133,7 @@ function combater(inimigoBase) {
                 break;
             }
             // Turno do Inimigo
-            console.log(`O ${inimigo.nome} contra-ataca!`);
+            console.log(`O ${inimigo.nome} contra-atacou e você sofreu ${inimigo.ataque} de dano!`);
             receberDano(inimigo.ataque);
         } else if (acao === "2") {
             console.log("\nVocê conseguiu escapar com segurança!");
@@ -159,11 +160,17 @@ function exibirInventario() {
         return;
     }
     // Uso de for...of para mostrar itens
-    let index = 1;
+    /*let index = 1;
     for (let item of inventario) {
         console.log(`${index} - ${item}`);
         index++;
-    }
+    }*/
+    let contagem = inventario.reduce((contador, item) => {
+        contador[item] = (contador[item] || 0) + 1;
+        return contador;
+        }, {});
+    console.log(contagem);
+
     // Opções de gerenciamento para usar as funções obrigatórias do array
     console.log("\nDeseja gerenciar seus itens?");
     console.log("1 - Usar Poção (Remover do inventário)");
@@ -171,37 +178,41 @@ function exibirInventario() {
     console.log("3 - Descartar último item (pop)");
     console.log("4 - Inserir item no início (unshift)");
     console.log("5 - Voltar ao menu");
-    let op = rl.question("Opção: ");
-    if (op === "1") {
-        let posPotion = inventario.indexOf("Poção");
-        if (posPotion !== -1) {
-            // Uso de splice para remover a poção de uma posição específica
-            inventario.splice(posPotion, 1);
-            curar(40);
-        } else {
+    let op = rl.questionInt("Opcao: ");
+    switch (op) {
+        case 1:
+            let posPotion = inventario.indexOf("Poção");
+            if (posPotion !== -1) {
+                // Uso de splice para remover a poção de uma posição específica
+                inventario.splice(posPotion, 1);
+                curar(40);
+            } else {
             console.log("Você não tem nenhuma Poção no inventário!");
-        }
-    } else if (op === "2") {
-        if (inventario.length > 0) {
-            // Uso do shift
-            let removido = inventario.shift();
-            console.log(`Você descartou o primeiro item: ${removido}`);
-        } else {
-            console.log("Inventário vazio.");
-        }
-    } else if (op === "3") {
-        if (inventario.length > 0) {
-            // Uso do pop
-            let removido = inventario.pop();
-            console.log(`Você descartou o último item: ${removido}`);
-        } else {
-            console.log("Inventário vazio.");
-        }
-    } else if (op === "4") {
-        let itemExtra = rl.question("Qual item deseja inserir no início do inventário? ");
-        // Uso do unshift
-        inventario.unshift(itemExtra);
-        console.log(`${itemExtra} foi adicionado no início.`);
+            }; break;
+        case 2:
+            if (inventario.length > 0) {
+                // Uso do shift
+                let removido = inventario.shift();
+                console.log(`Você descartou o primeiro item: ${removido}`);
+            } else {
+                console.log("Inventário vazio.");
+            }; break;
+        case 3:
+            if (inventario.length > 0) {
+                // Uso do pop
+                let removido = inventario.pop();
+                console.log(`Você descartou o último item: ${removido}`);
+            } else {
+                console.log("Inventário vazio.");
+            }; break;
+        case 4:
+            let itemExtra = rl.question("Qual item deseja inserir no início do inventário? ");
+            // Uso do unshift
+            inventario.unshift(itemExtra);
+            console.clear();
+            console.log(`${itemExtra} foi adicionado no início.`);
+            break;
+        default:
     }
 }
 // ==========================================
@@ -216,13 +227,12 @@ function explorar() {
         // Encontrou um inimigo aleatório
         let numInimigo = Math.floor(Math.random() * inimigosDisponiveis.length);
         combater(inimigosDisponiveis[numInimigo]);
-        rl.question();console.clear();
+        //rl.question();console.clear();
     } else if (chance === 1) {
         console.log("\nVocê encontrou um baú misterioso!");
         // Uso do push para colocar no fim do array
         inventario.push("Poção");
         console.log("Você ganhou uma: Poção!");
-        rl.question();console.clear();
     } else if (chance === 2) {
         console.log("\nVocê encontrou um Escudo jogado no chão!");
         inventario.push("Escudo");
@@ -231,15 +241,13 @@ function explorar() {
             missoes[1].concluida = true;
             console.log("✨ MISSÃO CONCLUÍDA: Encontrar um Escudo! ✨");
         }
-        rl.question();console.clear();
     } else if (chance === 3) {
         console.log("\nUgh! Você pisou em uma armadilha de espinhos!");
         receberDano(15);
-        rl.question();console.clear();
     } else {
-        console.log("\nVocê caminhou por um tempo, mas a área parece tranquila. Nada aconteceu.");
-        rl.question();console.clear();
+        console.log("\nVocê caminhou por um tempo, mas a área parece tranquila. Nada aconteceu."); 
     }
+    rl.question();console.clear();
 }
 // ==========================================
 // 6. EXIBIÇÃO DE STATUS E MISSÕES
@@ -260,7 +268,7 @@ function mostrarStatus() {
         let statusMissao = missao.concluida ? "[✔] Concluída" : "[ ] Em andamento";
         console.log(`- ${missao.nome}: ${statusMissao}`);
     });
-    console.log("========================================");
+    rl.question("========================================");console.clear();
 }
 // ==========================================
 // 7. VERIFICAÇÃO DE VITÓRIA
@@ -281,7 +289,7 @@ function verificarVitoria() {
 function iniciarJogo() {
     cadastrarPersonagem();
     let jogando = true;
-    while (jogando && heroi.vida > 0) {rl.keyInPause();console.clear();
+    while (jogando && heroi.vida > 0) {//rl.question();console.clear();
         console.log("\n=== MENU PRINCIPAL ===");
         console.log("1 - Explorar");
         console.log("2 - Ver Status");
