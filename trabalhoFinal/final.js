@@ -2,7 +2,6 @@ const rl = require("readline-sync");
 // ==========================================
 // TRABALHO FINAL — "A JORNADA DO HERÓI"
 // ==========================================
-// Importação da biblioteca obrigatória
 
 // ==========================================
 // 1. VARIÁVEIS E CONSTANTES DO HERÓI
@@ -16,11 +15,11 @@ let heroi = {
 };
 
 // Inventário (inicialmente vazio)
-let inventario = [];
+let inventario = ["Espada", "Escudo", "Mapa", "Mapa", "Escudo", "Mapa"];
 
 // Missões (Array de objetos)
 let missoes = [
-    { nome: "Derrotar 3 Goblins", concluida: false },
+    { nome: "Derrotar 2 Goblins", concluida: false },
     { nome: "Encontrar um Escudo", concluida: false }
 ];
 
@@ -34,9 +33,8 @@ const inimigosDisponiveis = [
     { nome: "Esqueleto", vida: 40, ataque: 10 },
     { nome: "Dragão", vida: 100, ataque: 20 }
 ];
-
 // ==========================================
-// 2. CADASTRO DO PERSONAGEM (SWITCH / IF-ELSE)
+// 2. CADASTRO DO PERSONAGEM 
 // ==========================================
 function cadastrarPersonagem() {
     console.log("========================================");
@@ -101,11 +99,13 @@ function curar(quantidade) {
         heroi.vida = heroi.vidaMaxima;
     }
     console.log(`Você recuperou ${quantidade} de vida! Vida atual: ${heroi.vida}/${heroi.vidaMaxima}`);
-};let missed = 1 // conta quantas vezes o herói fez nada (nem atacou, nem fugiu)
+};
+let missed = 1 // conta quantas vezes o herói fez nada (nem atacou, nem fugiu)
 function combater(inimigoBase) {
     // Clona o objeto inimigo para não alterar o original da matriz
     let inimigo = { ...inimigoBase }; console.clear();
     console.log(`\n--- UM INIMIGO SURGIU! Um perigoso ${inimigo.nome} apareceu! ---`);
+    console.log(`( ͠° ͟ʖ ͡°)`)
     // Loop de combate utilizando while
     while (inimigo.vida > 0 && heroi.vida > 0) {
         console.log(`\nInimigo: ${inimigo.nome} (Vida: ${inimigo.vida})`);
@@ -125,9 +125,9 @@ function combater(inimigoBase) {
                 if (inimigo.nome === "Goblin") {
                     goblinsDerrotados++;
                     console.log(`Goblins derrotados para a missão: ${goblinsDerrotados}/3`);
-                    if (goblinsDerrotados === 3) {
+                    if (goblinsDerrotados === 2) {
                         missoes[0].concluida = true;
-                        console.log("✨ MISSÃO CONCLUÍDA: Derrotar 3 Goblins! ✨");
+                        console.log("✨ MISSÃO CONCLUÍDA: Derrotar 2 Goblins! ✨");
                     }
                 }
                 break;
@@ -144,6 +144,7 @@ function combater(inimigoBase) {
                 receberDano(inimigo.ataque)
                 missed++
             } else {
+                console.log("\nOpção inválida! Hesitou novamente e soufreu um golpe fatal")
                 heroi.vida = 0
                 break
             }
@@ -160,17 +161,20 @@ function exibirInventario() {
         return;
     }
     // Uso de for...of para mostrar itens
-    /*let index = 1;
+    let itensContados = {};
     for (let item of inventario) {
-        console.log(`${index} - ${item}`);
-        index++;
-    }*/
-    let contagem = inventario.reduce((contador, item) => {
-            contador[item] = (contador[item] || 0) + 1;
-            return contador;}, {});
-    let lista = Object.entries(contagem).map(
+        itensContados[item] = (itensContados[item] || 0) + 1;
+    }
+    Object.entries(itensContados).forEach(([item, qtd]) => {
+        console.log(qtd > 1 ? `${item} (${qtd})` : item);
+    });
+    // let itensContados = inventario.reduce((contador, item) => {
+    //         contador[item] = (contador[item] || 0) + 1;
+    //         return contador;}, {});
+    
+    /*let lista = Object.entries(itensContados).map(
         ([item,qtd]) => qtd > 1 ? `${item} (${qtd})` : item).join('\n');
-    console.log(lista);
+    console.log(lista);*/
 
     // Opções de gerenciamento para usar as funções obrigatórias do array
     console.log("\nDeseja gerenciar seus itens?");
@@ -213,7 +217,7 @@ function exibirInventario() {
             console.clear();
             console.log(`${itemExtra} foi adicionado no início.`);
             break;
-        default:
+        default: console.clear();
     }
 }
 // ==========================================
@@ -326,7 +330,7 @@ function iniciarJogo() {
         // Verifica se concluiu todas as missões para vencer
         if (verificarVitoria()) {
             console.log("\n========================================");
-            console.log("              PARABÉNS!                 ");
+            console.log("              PARABÉNS!        ( ͡° ͜ʖ ͡°) ");
             console.log("      Você concluiu a aventura!         ");
             console.log("========================================");
             jogando = false;
