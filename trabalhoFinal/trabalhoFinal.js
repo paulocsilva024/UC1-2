@@ -15,7 +15,7 @@ let heroi = {
 };
 
 // Inventário (inicialmente vazio)
-let inventario = ["Espada", "Escudo", "Mapa", "Mapa", "Escudo", "Mapa"];
+let inventario = ["Mapa"];
 
 // Missões (Array de objetos)
 let missoes = [
@@ -28,10 +28,10 @@ let goblinsDerrotados = 0;
 
 // Matriz de inimigos (exigência de Matrizes/Arrays)
 const inimigosDisponiveis = [
+    { nome: "Dragão", vida: 100, ataque: 20 },
     { nome: "Goblin", vida: 30, ataque: 8 },
     { nome: "Orc", vida: 50, ataque: 12 },
     { nome: "Esqueleto", vida: 40, ataque: 10 },
-    { nome: "Dragão", vida: 100, ataque: 20 }
 ];
 // ==========================================
 // 2. CADASTRO DO PERSONAGEM 
@@ -105,7 +105,7 @@ function combater(inimigoBase) {
     // Clona o objeto inimigo para não alterar o original da matriz
     let inimigo = { ...inimigoBase }; console.clear();
     console.log(`\n--- UM INIMIGO SURGIU! Um perigoso ${inimigo.nome} apareceu! ---`);
-    console.log(`( ͠° ͟ʖ ͡°)`)
+    console.log(`(° ͟ʖ ͡°)`)
     // Loop de combate utilizando while
     while (inimigo.vida > 0 && heroi.vida > 0) {
         console.log(`\nInimigo: ${inimigo.nome} (Vida: ${inimigo.vida})`);
@@ -124,10 +124,10 @@ function combater(inimigoBase) {
                 // Progresso da Missão dos Goblins
                 if (inimigo.nome === "Goblin") {
                     goblinsDerrotados++;
-                    console.log(`Goblins derrotados para a missão: ${goblinsDerrotados}/3`);
+                    console.log(`Goblins derrotados para a missão: ${goblinsDerrotados}/2`);
                     if (goblinsDerrotados === 2) {
                         missoes[0].concluida = true;
-                        console.log("✨ MISSÃO CONCLUÍDA: Derrotar 2 Goblins! ✨");
+                        console.log("\n✨ MISSÃO CONCLUÍDA: Derrotar 2 Goblins! ✨");
                     }
                 }
                 break;
@@ -226,19 +226,19 @@ function exibirInventario() {
 function explorar() {
     console.log("\nExplorando a região...");
     rl.question("ENTER para explorar mais rapido...");
-    // Gera valor aleatório entre 0 e 4
+    // Gera valor aleatório entre 1 e 4
     let chance = Math.floor(Math.random() * 5);
-    if (chance === 0) {
+    if (chance === 1) {
         // Encontrou um inimigo aleatório
         let numInimigo = Math.floor(Math.random() * inimigosDisponiveis.length);
         combater(inimigosDisponiveis[numInimigo]);
         //rl.question();console.clear();
-    } else if (chance === 1) {
+    } else if (chance === 2) {
         console.log("\nVocê encontrou um baú misterioso!");
         // Uso do push para colocar no fim do array
         inventario.push("Poção");
         console.log("Você ganhou uma: Poção!");
-    } else if (chance === 2) {
+    } else if (chance === 3) {
         console.log("\nVocê encontrou um Escudo jogado no chão!");
         inventario.push("Escudo");
         // Verifica se completou a segunda missão
